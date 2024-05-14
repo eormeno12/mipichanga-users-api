@@ -34,6 +34,10 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Environment variables
 .env
+.stag.env
+.prod.env
 
-/mongo_data
+# Docker data
+mongo_data/
