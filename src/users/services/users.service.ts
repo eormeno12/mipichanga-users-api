@@ -23,7 +23,6 @@ export class UsersService {
         _id: id,
       },
       {
-        docStatus: 0,
         __v: 0,
         createdAt: 0,
         updatedAt: 0,
@@ -41,7 +40,6 @@ export class UsersService {
         email,
       },
       {
-        docStatus: 0,
         __v: 0,
         createdAt: 0,
         updatedAt: 0,
