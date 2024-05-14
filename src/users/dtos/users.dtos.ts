@@ -2,6 +2,7 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
   IsDate,
   IsEmail,
+  IsMongoId,
   IsNotEmpty,
   IsString,
   Matches,
@@ -10,6 +11,11 @@ import {
 } from 'class-validator';
 
 export class AddMatchDto {
+  @ApiProperty({ description: 'Id of the match' })
+  @IsNotEmpty()
+  @IsMongoId()
+  readonly id: string;
+
   @ApiProperty({ description: 'Date when the match was created' })
   @IsNotEmpty()
   @IsDate()
@@ -19,12 +25,12 @@ export class AddMatchDto {
   @ApiProperty({ description: 'Name of the match' })
   @IsNotEmpty()
   @IsString()
-  @MinDate(new Date())
   readonly name: string;
-
+  
   @ApiProperty({ description: 'Date of the match' })
   @IsNotEmpty()
   @IsDate()
+  @MinDate(new Date())
   readonly date: Date;
 }
 

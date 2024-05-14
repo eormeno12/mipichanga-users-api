@@ -10,7 +10,7 @@ export class Match {
 
 @Schema({ _id: false })
 export class MatchSchema extends Document implements Match {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   id: string;
 
   @Prop({ type: String, required: true })

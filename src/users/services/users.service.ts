@@ -77,13 +77,25 @@ export class UsersService {
   }
 
   // Add match to user
-  async addMatch(userId: string, matchId: string, payload: AddMatchDto) {
+  async addMatch(userId: string, payload: AddMatchDto) {
     const user = await this.findOne(userId);
+    user.matches.push(payload);
 
-    user.matches.push({
-      ...payload,
-      id: matchId,
-    });
+    return user.save();
+  }
+
+  // Delete match from user
+  async deleteMatch(userId: string, matchId: string) {
+    const user = await this.findOne(userId);
+    const matchIndex = user.matches.findIndex((match) => match.id === matchId);
+
+    if (matchIndex === -1) {
+      throw new NotFoundException(
+        "The Match with the id: '" + matchId + "' does not exist.",
+      );
+    }
+
+    user.matches.splice(matchIndex, 1);
 
     return user.save();
   }

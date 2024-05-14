@@ -49,10 +49,19 @@ export class UsersController {
 
   // add match to user
   @UseGuards(JwtAuthGuard)
-  @Put(':userId/matches/:matchId')
+  @Put('me/matches')
   @ApiOperation({ summary: 'Add match to user' })
-  addMatchToUser(@Req() req: Request, @Body() payload: AddMatchDto) {
-    const { userId, matchId } = req.params;
-    return this.usersService.addMatch(userId, matchId, payload);
+  addMatchToUser(@Req() req: IAuthRequest, @Body() payload: AddMatchDto) {
+    const user = req.user as PayloadToken;
+    return this.usersService.addMatch(user.sub, payload);
+  }
+
+  // delete match from user
+  @UseGuards(JwtAuthGuard)
+  @Delete('me/matches/:idMatch')
+  @ApiOperation({ summary: 'Delete match from user' })
+  deleteMatchFromUser(@Req() req: IAuthRequest) {
+    const user = req.user as PayloadToken;
+    return this.usersService.deleteMatch(user.sub, req.params.idMatch);
   }
 }
