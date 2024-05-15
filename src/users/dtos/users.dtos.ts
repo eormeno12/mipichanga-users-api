@@ -14,7 +14,7 @@ export class AddMatchDto {
   @ApiProperty({ description: 'Id of the match' })
   @IsNotEmpty()
   @IsMongoId()
-  readonly id: string;
+  readonly _id: string;
 
   @ApiProperty({ description: 'Date when the match was created' })
   @IsNotEmpty()
@@ -26,7 +26,7 @@ export class AddMatchDto {
   @IsNotEmpty()
   @IsString()
   readonly name: string;
-  
+
   @ApiProperty({ description: 'Date of the match' })
   @IsNotEmpty()
   @IsDate()

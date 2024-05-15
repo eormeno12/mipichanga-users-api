@@ -1,17 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export class Match {
   createdAt: Date;
-  id: string;
+  _id: string;
   name: string;
   date: Date;
 }
 
 @Schema({ _id: false })
 export class MatchSchema extends Document implements Match {
-  @Prop({ type: String, required: true, unique: true })
-  id: string;
+  @Prop({ type: Types.ObjectId, required: true, unique: true })
+  _id: string;
 
   @Prop({ type: String, required: true })
   name: string;

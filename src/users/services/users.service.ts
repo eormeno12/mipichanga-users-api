@@ -85,7 +85,7 @@ export class UsersService {
   // Delete match from user
   async deleteMatch(userId: string, matchId: string) {
     const user = await this.findOne(userId);
-    const matchIndex = user.matches.findIndex((match) => match.id === matchId);
+    const matchIndex = user.matches.findIndex((match) => match._id === matchId);
 
     if (matchIndex === -1) {
       throw new NotFoundException(
