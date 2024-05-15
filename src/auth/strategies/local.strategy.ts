@@ -6,7 +6,10 @@ import { StrategyName } from '../models/strategy-name.model';
 import { AuthService } from './../services/auth.service';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy, StrategyName.LOCAL) {
+export class LocalStrategy extends PassportStrategy(
+  Strategy,
+  StrategyName.LOCAL,
+) {
   constructor(private authService: AuthService) {
     super({
       usernameField: 'email',
@@ -20,7 +23,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, StrategyName.LOCAL
     if (!user) {
       throw new UnauthorizedException('User not allow');
     }
-    
+
     return user;
   }
 }

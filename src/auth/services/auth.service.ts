@@ -9,11 +9,10 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { ConfigType } from '@nestjs/config';
+import { Response } from 'express';
 import config from 'src/config';
 import { User } from 'src/users/entities/users.entity';
-import { AuthUser } from '../models/auth-user';
 import { UsersService } from './../../users/services/users.service';
-import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +27,7 @@ export class AuthService {
     return access_token;
   }
 
-  async validateUser(email: string, password: string): Promise<AuthUser> {
+  async validateUser(email: string, password: string): Promise<User> {
     let user = (await this.usersService.findByEmail(email)) as User;
 
     if (user) {
@@ -38,10 +37,7 @@ export class AuthService {
       user = await this.registerUser(email, password);
     }
 
-    return {
-      id: user.id,
-      email: user.email,
-    };
+    return user;
   }
 
   async registerUser(email: string, password: string) {
@@ -56,6 +52,7 @@ export class AuthService {
 
       return newUser;
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Error creating user');
     }
   }

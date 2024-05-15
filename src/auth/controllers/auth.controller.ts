@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { User } from 'src/users/entities/users.entity';
 import { IAuthRequest } from 'types';
-import { AuthUser } from '../models/auth-user';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { StrategyName } from '../models/strategy-name.model';
 import { AuthService } from '../services/auth.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { Response } from 'express';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -16,9 +16,16 @@ export class AuthController {
   @UseGuards(AuthGuard(StrategyName.LOCAL))
   @Post('login')
   @ApiOperation({ summary: 'Login user' })
-  login(@Req() req: IAuthRequest) {
-    const user = req.user as AuthUser;
-    return this.authService.generateJWT(user.id);
+  login(@Req() req: IAuthRequest, @Res() res: Response) {
+    const user = req.user as User;
+
+    const accessToken = this.authService.generateJWT(user.id);
+    res.cookie('access_token', accessToken, {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+    });
+
+    return res.send(user);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,4 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
@@ -7,9 +8,49 @@ import {
   IsString,
   IsUrl,
   Matches,
-  MaxDate,
-  MinDate,
+  ValidateNested,
 } from 'class-validator';
+import { FieldLocation, FieldMatch } from '../entities/users.entity';
+
+export class FieldLocationDto implements FieldLocation {
+  @ApiProperty({ description: 'The prefix of the location' })
+  @IsNotEmpty()
+  @IsString()
+  readonly prefix: string;
+
+  @ApiProperty({ description: 'The city of the location' })
+  @IsNotEmpty()
+  @IsString()
+  readonly city: string;
+
+  @ApiProperty({ description: 'The country of the location' })
+  @IsNotEmpty()
+  @IsString()
+  readonly country: string;
+}
+
+export class FieldMatchDto {
+  @ApiProperty({ description: 'The id of the field' })
+  @IsNotEmpty()
+  @IsMongoId()
+  readonly _id: string;
+
+  @ApiProperty({ description: 'The name of the field' })
+  @IsNotEmpty()
+  @IsString()
+  readonly name: string;
+
+  @ApiProperty({ description: 'The image URL of the field' })
+  @IsNotEmpty()
+  @IsUrl()
+  readonly imageUrl: string;
+
+  @ApiProperty({ description: 'The location of the field' })
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => FieldLocationDto)
+  readonly location: FieldLocationDto;
+}
 
 export class AddMatchDto {
   @ApiProperty({ description: 'Id of the match' })
@@ -20,7 +61,6 @@ export class AddMatchDto {
   @ApiProperty({ description: 'Date when the match was created' })
   @IsNotEmpty()
   @IsDate()
-  @MaxDate(new Date())
   readonly createdAt: Date;
 
   @ApiProperty({ description: 'Name of the match' })
@@ -31,13 +71,13 @@ export class AddMatchDto {
   @ApiProperty({ description: 'Date of the match' })
   @IsNotEmpty()
   @IsDate()
-  @MinDate(new Date())
   readonly date: Date;
 
-  @ApiProperty({ description: 'Image URL of the match' })
+  @ApiProperty({ description: 'Field of the match' })
   @IsNotEmpty()
-  @IsUrl()
-  readonly imageUrl: string;
+  @ValidateNested()
+  @Type(() => FieldMatchDto)
+  readonly field: FieldMatch;
 }
 
 export class CreateUserDto {
