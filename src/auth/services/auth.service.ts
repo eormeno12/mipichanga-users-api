@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -12,6 +13,7 @@ import config from 'src/config';
 import { User } from 'src/users/entities/users.entity';
 import { AuthUser } from '../models/auth-user';
 import { UsersService } from './../../users/services/users.service';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -56,5 +58,10 @@ export class AuthService {
     } catch (error) {
       throw new InternalServerErrorException('Error creating user');
     }
+  }
+
+  async logout(res: Response) {
+    res.clearCookie('access_token');
+    res.status(HttpStatus.OK).send();
   }
 }
