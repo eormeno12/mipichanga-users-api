@@ -6,6 +6,7 @@ export class Match {
   _id: string;
   name: string;
   date: Date;
+  imageUrl: string;
 }
 
 @Schema({ _id: false })
@@ -21,6 +22,9 @@ export class MatchSchema extends Document implements Match {
 
   @Prop({ type: Date, required: true })
   createdAt: Date;
+
+  @Prop({ type: String, required: true })
+  imageUrl: string;
 }
 
 @Schema({ timestamps: true })

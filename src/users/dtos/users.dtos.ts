@@ -5,6 +5,7 @@ import {
   IsMongoId,
   IsNotEmpty,
   IsString,
+  IsUrl,
   Matches,
   MaxDate,
   MinDate,
@@ -32,6 +33,11 @@ export class AddMatchDto {
   @IsDate()
   @MinDate(new Date())
   readonly date: Date;
+
+  @ApiProperty({ description: 'Image URL of the match' })
+  @IsNotEmpty()
+  @IsUrl()
+  readonly imageUrl: string;
 }
 
 export class CreateUserDto {
