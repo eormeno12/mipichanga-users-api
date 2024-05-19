@@ -10,42 +10,41 @@ import {
   Matches,
   ValidateNested,
 } from 'class-validator';
-import { FieldLocation, FieldMatch } from '../entities/users.entity';
 
-export class FieldLocationDto implements FieldLocation {
-  @ApiProperty({ description: 'The prefix of the location' })
+export class FieldLocationDto {
+  @ApiProperty({ description: 'El prefijo de la ubicación' })
   @IsNotEmpty()
   @IsString()
   readonly prefix: string;
 
-  @ApiProperty({ description: 'The city of the location' })
+  @ApiProperty({ description: 'La ciudad de la ubicación' })
   @IsNotEmpty()
   @IsString()
   readonly city: string;
 
-  @ApiProperty({ description: 'The country of the location' })
+  @ApiProperty({ description: 'El país de la ubicación' })
   @IsNotEmpty()
   @IsString()
   readonly country: string;
 }
 
 export class FieldMatchDto {
-  @ApiProperty({ description: 'The id of the field' })
+  @ApiProperty({ description: 'El ID de la cancha' })
   @IsNotEmpty()
   @IsMongoId()
   readonly _id: string;
 
-  @ApiProperty({ description: 'The name of the field' })
+  @ApiProperty({ description: 'El nombre de la cancha' })
   @IsNotEmpty()
   @IsString()
   readonly name: string;
 
-  @ApiProperty({ description: 'The image URL of the field' })
+  @ApiProperty({ description: 'La URL de la imagen de la cancha' })
   @IsNotEmpty()
   @IsUrl()
   readonly imageUrl: string;
 
-  @ApiProperty({ description: 'The location of the field' })
+  @ApiProperty({ description: 'La ubicación de la cancha' })
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => FieldLocationDto)
@@ -53,44 +52,44 @@ export class FieldMatchDto {
 }
 
 export class AddMatchDto {
-  @ApiProperty({ description: 'Id of the match' })
+  @ApiProperty({ description: 'ID del partido' })
   @IsNotEmpty()
   @IsMongoId()
   readonly _id: string;
 
-  @ApiProperty({ description: 'Date when the match was created' })
+  @ApiProperty({ description: 'Fecha de creación del partido' })
   @IsNotEmpty()
   @IsDate()
   readonly createdAt: Date;
 
-  @ApiProperty({ description: 'Name of the match' })
+  @ApiProperty({ description: 'Nombre del partido' })
   @IsNotEmpty()
   @IsString()
   readonly name: string;
 
-  @ApiProperty({ description: 'Date of the match' })
+  @ApiProperty({ description: 'Fecha del partido' })
   @IsNotEmpty()
   @IsDate()
   readonly date: Date;
 
-  @ApiProperty({ description: 'Field of the match' })
+  @ApiProperty({ description: 'Cancha del partido' })
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => FieldMatchDto)
-  readonly field: FieldMatch;
+  readonly field: FieldMatchDto;
 }
 
 export class CreateUserDto {
-  @ApiProperty({ description: 'Email of the user' })
+  @ApiProperty({ description: 'Correo electrónico del usuario' })
   @IsNotEmpty()
   @IsEmail()
   readonly email: string;
 
-  @ApiProperty({ description: 'Password of the user' })
+  @ApiProperty({ description: 'Contraseña del usuario' })
   @IsNotEmpty()
   @IsString()
   @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
-    message: 'Password too weak',
+    message: 'Contraseña demasiado débil',
   })
   readonly password: string;
 }

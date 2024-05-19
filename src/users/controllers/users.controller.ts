@@ -7,7 +7,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PayloadToken } from 'src/auth/models/token.model';
 import { IAuthRequest } from 'types';
@@ -19,46 +26,71 @@ import { UsersService } from '../services/users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  // get profile
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  @ApiOperation({ summary: 'Get user profile' })
+  @ApiOperation({ summary: 'Obtener perfil del usuario' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Perfil del usuario obtenido exitosamente.',
+  })
+  @ApiResponse({ status: 401, description: 'No autorizado.' })
   getProfile(@Req() req: IAuthRequest) {
     const userToken = req.user as PayloadToken;
     return this.usersService.findOne(userToken.sub);
   }
 
-  // update profile
   @UseGuards(JwtAuthGuard)
   @Put('me')
-  @ApiOperation({ summary: 'Update user profile' })
+  @ApiOperation({ summary: 'Actualizar perfil del usuario' })
+  @ApiBearerAuth()
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Perfil del usuario actualizado exitosamente.',
+  })
+  @ApiResponse({ status: 400, description: 'Solicitud incorrecta.' })
+  @ApiResponse({ status: 401, description: 'No autorizado.' })
   updateProfile(@Body() payload: UpdateUserDto, @Req() req: IAuthRequest) {
     const userToken = req.user as PayloadToken;
     return this.usersService.update(userToken.sub, payload);
   }
 
-  // delete profile
   @UseGuards(JwtAuthGuard)
   @Delete('me')
-  @ApiOperation({ summary: 'Delete user profile' })
+  @ApiOperation({ summary: 'Eliminar perfil del usuario' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Perfil del usuario eliminado exitosamente.',
+  })
+  @ApiResponse({ status: 401, description: 'No autorizado.' })
   deleteProfile(@Req() req: IAuthRequest) {
     const userToken = req.user as PayloadToken;
     return this.usersService.delete(userToken.sub);
   }
 
-  // add match to user
   @UseGuards(JwtAuthGuard)
   @Put('me/matches')
-  @ApiOperation({ summary: 'Add match to user' })
+  @ApiOperation({ summary: 'Agregar partido al usuario' })
+  @ApiBearerAuth()
+  @ApiBody({ type: AddMatchDto })
+  @ApiResponse({ status: 200, description: 'Partido agregado exitosamente.' })
+  @ApiResponse({ status: 400, description: 'Solicitud incorrecta.' })
+  @ApiResponse({ status: 401, description: 'No autorizado.' })
   addMatchToUser(@Req() req: IAuthRequest, @Body() payload: AddMatchDto) {
     const user = req.user as PayloadToken;
     return this.usersService.addMatch(user.sub, payload);
   }
 
-  // delete match from user
   @UseGuards(JwtAuthGuard)
   @Delete('me/matches/:idMatch')
-  @ApiOperation({ summary: 'Delete match from user' })
+  @ApiOperation({ summary: 'Eliminar partido del usuario' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'idMatch', description: 'ID del partido' })
+  @ApiResponse({ status: 200, description: 'Partido eliminado exitosamente.' })
+  @ApiResponse({ status: 400, description: 'Solicitud incorrecta.' })
+  @ApiResponse({ status: 401, description: 'No autorizado.' })
   deleteMatchFromUser(@Req() req: IAuthRequest) {
     const user = req.user as PayloadToken;
     return this.usersService.deleteMatch(user.sub, req.params.idMatch);

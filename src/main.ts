@@ -18,8 +18,13 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('MiPichanga (Users) - API')
-    .setDescription('Documentación del microservicio MiPichanga (Users) - API')
+    .setDescription(
+      'API para la gestión de usuarios en MiPichanga. Permite obtener, actualizar y eliminar el perfil de usuario, así como gestionar partidos asociados.',
+    )
     .setVersion('1.0')
+    .addBearerAuth()
+    .addTag('users', 'Endpoints relacionados con la gestión de usuarios')
+    .addTag('auth', 'Endpoints relacionados con la autenticación de usuarios')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
